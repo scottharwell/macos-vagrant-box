@@ -1,0 +1,5 @@
+{
+    "name": "scottharwell/macOS-OS_NAME",
+    "description": "This box contains macOS with Xcode command line utilities and Homebrew installed.",
+    "provider": "parallels"
+}
