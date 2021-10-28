@@ -6,55 +6,55 @@
   tasks:
     - name: Create metadata file
       copy:
-        src: "/Volumes/Media/Parallels/macOS Vagrant Box/metadata.json.template"
-        dest: "/Volumes/Media/Parallels/macOS Vagrant Box/metadata.json"
+        src: "{{ playbook_dir }}/metadata.json.template"
+        dest: "{{ playbook_dir }}/metadata.json"
     - name: Configure metadata file
       replace:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/metadata.json"
+        path: "{{ playbook_dir }}/metadata.json"
         regexp: 'OS_NAME'
         replace: "{{ macos_name }}"
     - name: Create Vagrant file
       copy:
-        src: "/Volumes/Media/Parallels/macOS Vagrant Box/Vagrantfile.template"
-        dest: "/Volumes/Media/Parallels/macOS Vagrant Box/Vagrantfile"
+        src: "{{ playbook_dir }}/Vagrantfile.template"
+        dest: "{{ playbook_dir }}/Vagrantfile"
     - name: Configure Vagrant file
       replace:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/Vagrantfile"
+        path: "{{ playbook_dir }}/Vagrantfile"
         regexp: 'OS_NAME'
         replace: "{{ macos_name }}"
     - name: Copy macOS VM
       copy:
-        src: "/Volumes/Media/Parallels/macOS {{ macos_version }}.pvm"
-        dest: "/Volumes/Media/Parallels/macOS Vagrant Box"
+        src: "{{ parallels_path }}/macOS {{ macos_version }}.pvm"
+        dest: "{{ playbook_dir }}"
     - name: Remove unnecessary files from source
       file:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/macOS {{ macos_version }}.pvm/config.pvs.backup"
+        path: "{{ playbook_dir }}/macOS {{ macos_version }}.pvm/config.pvs.backup"
         state: absent
     - name: Optimize HDD
-      command: "prl_disk_tool compact --hdd '/Volumes/Media/Parallels/macOS Vagrant Box/macOS {{ macos_version }}.pvm/harddisk.hdd'"
+      command: "prl_disk_tool compact --hdd '{{ playbook_dir }}/macOS {{ macos_version }}.pvm/harddisk.hdd'"
     - name: Package VM
       community.general.archive:
         path:
-          - "/Volumes/Media/Parallels/macOS Vagrant Box/macos.box"
-          - "/Volumes/Media/Parallels/macOS Vagrant Box/macOS {{ macos_version }}.pvm"
-          - "/Volumes/Media/Parallels/macOS Vagrant Box/Vagrantfile"
-          - "/Volumes/Media/Parallels/macOS Vagrant Box/metadata.json"
-        dest: "/Volumes/Media/Parallels/macOS Vagrant Box/macos.box"
+          - "{{ playbook_dir }}/macos.box"
+          - "{{ playbook_dir }}/macOS {{ macos_version }}.pvm"
+          - "{{ playbook_dir }}/Vagrantfile"
+          - "{{ playbook_dir }}/metadata.json"
+        dest: "{{ playbook_dir }}/macos.box"
     - name: Add new box
-      command: "vagrant box add --name scottharwell/macOS-{{ macos_name }} -c -f --machine-readable --provider parallels '/Volumes/Media/Parallels/macOS Vagrant Box/macos.box'"
+      command: "vagrant box add --name scottharwell/macOS-{{ macos_name }} -c -f --machine-readable --provider parallels '{{ playbook_dir }}/macos.box'"
     - name: Remove macos.box
       file:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/macos.box"
+        path: "{{ playbook_dir }}/macos.box"
         state: absent
     - name: Remove copied VM
       file:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/macOS {{ macos_version }}.pvm"
+        path: "{{ playbook_dir }}/macOS {{ macos_version }}.pvm"
         state: absent
     - name: Remove metadata file
       file:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/metadata.json"
+        path: "{{ playbook_dir }}/metadata.json"
         state: absent
     - name: Remove Vagrant file
       file:
-        path: "/Volumes/Media/Parallels/macOS Vagrant Box/Vagrantfile"
+        path: "{{ playbook_dir }}/Vagrantfile"
         state: absent
