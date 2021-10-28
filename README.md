@@ -1,0 +1,1 @@
+This Ansible playbook and supporting files are used to build a macOS Vagrant Box locally on my machine for Parallels.
