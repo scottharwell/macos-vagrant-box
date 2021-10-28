@@ -1,3 +1,5 @@
 metadata.json
 Vagrantfile
 .vagrant
+*.pvm
+*.box
