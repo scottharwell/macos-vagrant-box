@@ -35,7 +35,6 @@
     - name: Package VM
       community.general.archive:
         path:
-          - "{{ playbook_dir }}/macos.box"
           - "{{ playbook_dir }}/macOS {{ macos_version }}.pvm"
           - "{{ playbook_dir }}/Vagrantfile"
           - "{{ playbook_dir }}/metadata.json"
